@@ -4,7 +4,7 @@ import { View, Text } from 'react-native'
 const Header: FC = () => {
 	return (
 		<View>
-			<Text className='text-white mt-100'>Header</Text>
+			<Text>Header</Text>
 		</View>
 	)
 }

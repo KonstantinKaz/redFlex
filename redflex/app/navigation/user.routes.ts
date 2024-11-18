@@ -7,11 +7,11 @@ console.log('Home component:', Home)
 
 export const userRoutes: IRoute[] = [
 	{
-		name: 'Auth',
-		component: Auth
-	},
-	{
 		name: 'Home',
 		component: Home
+	},
+	{
+		name: 'Auth',
+		component: Auth
 	}
 ]

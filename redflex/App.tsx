@@ -3,6 +3,7 @@ import { StatusBar } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 import "./app/assets/global.css"
+import Header from '@/components/Header/Header'
 
 export default function App() {
 	return (
