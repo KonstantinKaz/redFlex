@@ -1,80 +1,52 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { ModelType, DocumentType } from '@typegoose/typegoose/lib/types'
+import { ModelType } from '@typegoose/typegoose/lib/types'
 import { genSalt, hash } from 'bcryptjs'
-import { Types } from 'mongoose'
 import { InjectModel } from 'nestjs-typegoose'
-import { UpdateDto } from './dto/update.dto'
+import { UpdateUserDto } from './dto/update-user.dto'
 import { UserModel } from './user.model'
+import { Types } from 'mongoose'
 
 @Injectable()
 export class UserService {
 	constructor(
-		@InjectModel(UserModel) private readonly userModel: ModelType<UserModel>
+		@InjectModel(UserModel) private readonly UserModel: ModelType<UserModel>
 	) {}
 
-	async byId(id: string): Promise<DocumentType<UserModel>> {
-		const user = await this.userModel.findById(id).exec()
+	async byId(_id: string) {
+		const user = await this.UserModel.findById(_id)
+		if (!user) throw new NotFoundException('User not found')
 
-		if (user) return user
-		throw new NotFoundException('User not found')
+		return user
 	}
 
-	async updateProfile(_id: string, data: UpdateDto) {
-		const user = await this.userModel.findById(_id)
-		const isSameUser = await this.userModel.findOne({ email: data.email })
+	async updateProfile(_id: string, dto: UpdateUserDto) {
+		const user = await this.byId(_id)
+		const isSameUser = await this.UserModel.findOne({ email: dto.email })
 
-		if (isSameUser && String(_id) !== String(isSameUser._id)) {
+		if (isSameUser && String(_id) !== String(isSameUser._id))
 			throw new NotFoundException('Email busy')
+
+		if (dto.password) {
+			const salt = await genSalt(10)
+			user.password = await hash(dto.password, salt)
 		}
 
-		if (user) {
-			if (data.password) {
-				const salt = await genSalt(10)
-				user.password = await hash(data.password, salt)
-			}
-			user.email = data.email
-			if (data.isAdmin || data.isAdmin === false) user.isAdmin = data.isAdmin
+		user.email = dto.email
+		if (dto.isAdmin || dto.isAdmin === false) user.isAdmin = dto.isAdmin
 
-			await user.save()
-			return
-		}
+		await user.save()
 
-		throw new NotFoundException('User not found')
-	}
-
-	async getFavoriteMovies(_id: string) {
-		return this.userModel
-			.findById(_id, 'favorites')
-			.populate({
-				path: 'favorites',
-				populate: {
-					path: 'genres',
-				},
-			})
-			.exec()
-			.then((data) => {
-				return data.favorites
-			})
-	}
-
-	async toggleFavorite(movieId: Types.ObjectId, user: UserModel) {
-		const { favorites, _id } = user
-
-		await this.userModel.findByIdAndUpdate(_id, {
-			favorites: favorites.includes(movieId)
-				? favorites.filter((id) => String(id) !== String(movieId))
-				: [...favorites, movieId],
-		})
+		return
 	}
 
 	async getCount() {
-		return this.userModel.find().count().exec()
+		return this.UserModel.find().count().exec()
 	}
 
-	async getAll(searchTerm?: string): Promise<DocumentType<UserModel>[]> {
+	async getAll(searchTerm?: string) {
 		let options = {}
 
-		if (searchTerm) {
+		if (searchTerm)
 			options = {
 				$or: [
 					{
@@ -82,16 +54,38 @@ export class UserService {
 					},
 				],
 			}
-		}
 
-		return this.userModel
-			.find(options)
+		return this.UserModel.find(options)
 			.select('-password -updatedAt -__v')
-			.sort({ createdAt: 'desc' })
+			.sort({
+				createdAt: 'desc',
+			})
 			.exec()
 	}
 
-	async delete(id: string): Promise<DocumentType<UserModel> | null> {
-		return this.userModel.findByIdAndDelete(id).exec()
+	async delete(id: string) {
+		return this.UserModel.findByIdAndDelete(id).exec()
+	}
+
+	async toggleFavorite(movieId: Types.ObjectId, user: UserModel) {
+		const { _id, favorites } = user
+
+		await this.UserModel.findByIdAndUpdate(_id, {
+			favorites: favorites.includes(movieId)
+				? favorites.filter((id) => String(id) !== String(movieId))
+				: [...favorites, movieId],
+		})
+	}
+
+	async getFavoriteMovies(_id: Types.ObjectId) {
+		return this.UserModel.findById(_id, 'favorites')
+			.populate({
+				path: 'favorites',
+				populate: {
+					path: 'genres',
+				},
+			})
+			.exec()
+			.then((data) => data.favorites)
 	}
 }

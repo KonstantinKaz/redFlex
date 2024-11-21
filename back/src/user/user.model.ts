@@ -1,5 +1,5 @@
 import { prop, Ref } from '@typegoose/typegoose'
-import { TimeStamps, Base } from '@typegoose/typegoose/lib/defaultClasses'
+import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
 import { MovieModel } from 'src/movie/movie.model'
 
 export interface UserModel extends Base {}

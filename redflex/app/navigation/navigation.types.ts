@@ -3,6 +3,11 @@ import { ComponentType } from 'react'
 export type TypeRootStackParamList = {
 	Auth: undefined
 	Home: undefined
+	Screen404: undefined
+	Trending: undefined
+	Search: undefined
+	Favorites: undefined
+	Profile: undefined
 } & TypeRootStackAdminList
 
 type TypeRootStackAdminList = {

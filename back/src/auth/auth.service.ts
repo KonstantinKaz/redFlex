@@ -1,12 +1,16 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common'
-import { JwtService } from '@nestjs/jwt'
+import {
+	BadRequestException,
+	Injectable,
+	UnauthorizedException,
+} from '@nestjs/common'
 import { ModelType } from '@typegoose/typegoose/lib/types'
-import { genSalt, hash, compare } from 'bcryptjs'
 import { InjectModel } from 'nestjs-typegoose'
-import { RefreshTokenDto } from './dto/refreshToken.dto'
+import { hash, genSalt, compare } from 'bcryptjs'
 
+import { UserModel } from 'src/user/user.model'
 import { AuthDto } from './dto/auth.dto'
-import { UserModel } from '../user/user.model'
+import { JwtService } from '@nestjs/jwt'
+import { RefreshTokenDto } from './dto/refreshToken.dto'
 
 @Injectable()
 export class AuthService {
@@ -15,24 +19,8 @@ export class AuthService {
 		private readonly jwtService: JwtService
 	) {}
 
-	async login({ email, password }: AuthDto) {
-		const user = await this.validateUser(email, password)
-
-		const tokens = await this.issueTokenPair(String(user._id))
-
-		return {
-			user: this.returnUserFields(user),
-			...tokens,
-		}
-	}
-
-	async register({ email, password }: AuthDto) {
-		const salt = await genSalt(10)
-		const newUser = new this.UserModel({
-			email,
-			password: await hash(password, salt),
-		})
-		const user = await newUser.save()
+	async login(dto: AuthDto) {
+		const user = await this.validateUser(dto)
 
 		const tokens = await this.issueTokenPair(String(user._id))
 
@@ -46,7 +34,6 @@ export class AuthService {
 		if (!refreshToken) throw new UnauthorizedException('Please sign in!')
 
 		const result = await this.jwtService.verifyAsync(refreshToken)
-
 		if (!result) throw new UnauthorizedException('Invalid token or expired!')
 
 		const user = await this.UserModel.findById(result._id)
@@ -59,15 +46,35 @@ export class AuthService {
 		}
 	}
 
-	async findByEmail(email: string) {
-		return this.UserModel.findOne({ email }).exec()
+	async register(dto: AuthDto) {
+		const oldUser = await this.UserModel.findOne({ email: dto.email })
+		if (oldUser)
+			throw new BadRequestException(
+				'User with this email is already in the system'
+			)
+
+		const salt = await genSalt(10)
+
+		const newUser = new this.UserModel({
+			email: dto.email,
+			password: await hash(dto.password, salt),
+		})
+
+		const user = await newUser.save()
+
+		const tokens = await this.issueTokenPair(String(user._id))
+
+		return {
+			user: this.returnUserFields(user),
+			...tokens,
+		}
 	}
 
-	async validateUser(email: string, password: string): Promise<UserModel> {
-		const user = await this.findByEmail(email)
+	async validateUser(dto: AuthDto): Promise<UserModel> {
+		const user = await this.UserModel.findOne({ email: dto.email })
 		if (!user) throw new UnauthorizedException('User not found')
 
-		const isValidPassword = await compare(password, user.password)
+		const isValidPassword = await compare(dto.password, user.password)
 		if (!isValidPassword) throw new UnauthorizedException('Invalid password')
 
 		return user

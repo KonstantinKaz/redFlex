@@ -4,7 +4,6 @@ import { LinearGradient } from 'expo-linear-gradient'
 import React, { FC, PropsWithChildren } from 'react'
 import { Pressable, Text } from 'react-native'
 import { IButton } from './button.interface'
-import '../../assets/global.css'
 
 const Button: FC<PropsWithChildren<IButton>> = ({
 	className,

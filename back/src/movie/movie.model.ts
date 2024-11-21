@@ -5,7 +5,7 @@ import { GenreModel } from 'src/genre/genre.model'
 
 export interface MovieModel extends Base {}
 
-export class Parameter {
+export class Parameters {
 	@prop()
 	year: number
 
@@ -23,29 +23,29 @@ export class MovieModel extends TimeStamps {
 	@prop()
 	bigPoster: string
 
-	@prop({ unique: true })
+	@prop()
 	title: string
 
+	@prop({ unique: true })
+	slug: string
+
 	@prop()
-	parameters: Parameter
+	parameters?: Parameters
 
 	@prop({ default: 4.0 })
 	rating?: number
 
-	@prop({ ref: () => GenreModel })
-	genres: Ref<GenreModel>[]
+	@prop()
+	videoUrl: string
 
 	@prop({ default: 0 })
 	countOpened?: number
 
-	@prop({ unique: true })
-	videoUrl: string
+	@prop({ ref: () => GenreModel })
+	genres: Ref<GenreModel>[]
 
 	@prop({ ref: () => ActorModel })
 	actors: Ref<ActorModel>[]
-
-	@prop({ unique: true })
-	slug: string
 
 	@prop({ default: false })
 	isSendTelegram?: boolean

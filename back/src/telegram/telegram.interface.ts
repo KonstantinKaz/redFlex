@@ -1,4 +1,4 @@
-export interface ITelegramOptions {
+export interface Telegram {
 	chatId: string
 	token: string
 }

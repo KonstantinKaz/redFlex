@@ -1,9 +1,9 @@
 import { FC } from 'react'
 import { Control } from 'react-hook-form'
 
+import Field from '@/components/ui/form/field/Field'
 import { validEmail } from '@/shared/regex'
 import { IAuthFormData } from '@/shared/types/auth.interface'
-import Field from 'ui/form/field/Field'
 
 interface IAuthFields {
 	control: Control<IAuthFormData>

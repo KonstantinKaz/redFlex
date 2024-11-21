@@ -4,7 +4,6 @@ import {
 	Delete,
 	Get,
 	HttpCode,
-	NotFoundException,
 	Param,
 	Post,
 	Put,
@@ -12,11 +11,12 @@ import {
 	UsePipes,
 	ValidationPipe,
 } from '@nestjs/common'
-import { IdValidationPipe } from '../pipes/id.validation.pipe'
-import { CreateMovieDto } from './dto/create-movie.dto'
+import { Auth } from 'src/auth/decorators/auth.decorator'
+import { IdValidationPipe } from 'src/pipes/id.validation.pipe'
 import { MovieService } from './movie.service'
-import { Auth } from 'src/auth/decorators/Auth.decorator'
 import { Types } from 'mongoose'
+import { UpdateMovieDto } from './dto/update-movie.dto'
+import { GenreIdsDto } from './dto/genreIds.dto'
 
 @Controller('movies')
 export class MovieController {
@@ -32,11 +32,12 @@ export class MovieController {
 		return this.movieService.byActor(actorId)
 	}
 
+	@UsePipes(new ValidationPipe())
 	@Post('by-genres')
 	@HttpCode(200)
 	async byGenres(
-		@Body('genreIds')
-		genreIds: Types.ObjectId[]
+		@Body()
+		{ genreIds }: GenreIdsDto
 	) {
 		return this.movieService.byGenres(genreIds)
 	}
@@ -46,12 +47,12 @@ export class MovieController {
 		return this.movieService.getAll(searchTerm)
 	}
 
-	@Get('/most-popular')
+	@Get('most-popular')
 	async getMostPopular() {
 		return this.movieService.getMostPopular()
 	}
 
-	@Post('/update-count-opened')
+	@Put('update-count-opened')
 	@HttpCode(200)
 	async updateCountOpened(@Body('slug') slug: string) {
 		return this.movieService.updateCountOpened(slug)
@@ -63,6 +64,7 @@ export class MovieController {
 		return this.movieService.byId(id)
 	}
 
+	@UsePipes(new ValidationPipe())
 	@Post()
 	@HttpCode(200)
 	@Auth('admin')
@@ -76,17 +78,15 @@ export class MovieController {
 	@Auth('admin')
 	async update(
 		@Param('id', IdValidationPipe) id: string,
-		@Body() dto: CreateMovieDto
+		@Body() dto: UpdateMovieDto
 	) {
-		const updateMovie = await this.movieService.update(id, dto)
-		if (!updateMovie) throw new NotFoundException('Movie not found')
-		return updateMovie
+		return this.movieService.update(id, dto)
 	}
 
 	@Delete(':id')
+	@HttpCode(200)
 	@Auth('admin')
 	async delete(@Param('id', IdValidationPipe) id: string) {
-		const deletedDoc = await this.movieService.delete(id)
-		if (!deletedDoc) throw new NotFoundException('Movie not found')
+		return this.movieService.delete(id)
 	}
 }

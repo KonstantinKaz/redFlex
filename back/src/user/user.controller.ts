@@ -4,21 +4,19 @@ import {
 	Delete,
 	Get,
 	HttpCode,
-	NotFoundException,
 	Param,
-	Post,
 	Put,
 	Query,
 	UsePipes,
 	ValidationPipe,
 } from '@nestjs/common'
-import { User } from './decorators/user.decorator'
-import { UserService } from './user.service'
-import { Auth } from 'src/auth/decorators/Auth.decorator'
-import { UpdateDto } from './dto/update.dto'
+import { Auth } from 'src/auth/decorators/auth.decorator'
 import { IdValidationPipe } from 'src/pipes/id.validation.pipe'
-import { UserModel } from './user.model'
+import { User } from './decorators/user.decorator'
+import { UpdateUserDto } from './dto/update-user.dto'
+import { UserService } from './user.service'
 import { Types } from 'mongoose'
+import { UserModel } from './user.model'
 
 @Controller('users')
 export class UserController {
@@ -34,17 +32,17 @@ export class UserController {
 	@Put('profile')
 	@HttpCode(200)
 	@Auth()
-	async updateProfile(@User('_id') _id: string, @Body() data: UpdateDto) {
-		return this.userService.updateProfile(_id, data)
+	async updateProfile(@User('_id') _id: string, @Body() dto: UpdateUserDto) {
+		return this.userService.updateProfile(_id, dto)
 	}
 
 	@Get('profile/favorites')
 	@Auth()
-	async getFavorites(@User('_id') _id: string) {
+	async getFavorites(@User('_id') _id: Types.ObjectId) {
 		return this.userService.getFavoriteMovies(_id)
 	}
 
-	@Post('profile/favorites')
+	@Put('profile/favorites')
 	@HttpCode(200)
 	@Auth()
 	async toggleFavorite(
@@ -78,15 +76,15 @@ export class UserController {
 	@Auth('admin')
 	async updateUser(
 		@Param('id', IdValidationPipe) id: string,
-		@Body() data: UpdateDto
+		@Body() dto: UpdateUserDto
 	) {
-		return this.userService.updateProfile(id, data)
+		return this.userService.updateProfile(id, dto)
 	}
 
 	@Delete(':id')
+	@HttpCode(200)
 	@Auth('admin')
-	async delete(@Param('id', IdValidationPipe) id: string) {
-		const deletedDoc = await this.userService.delete(id)
-		if (!deletedDoc) throw new NotFoundException('Movie not found')
+	async deleteUser(@Param('id', IdValidationPipe) id: string) {
+		return this.userService.delete(id)
 	}
 }

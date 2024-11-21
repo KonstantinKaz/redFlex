@@ -1,29 +1,46 @@
 import { enableScreens } from 'react-native-screens'
-enableScreens();
+enableScreens()
 
-import { NavigationContainer } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { FC } from 'react'
-import { TypeRootStackParamList } from './navigation.types'
-import { userRoutes } from './user.routes'
+import {
+	NavigationContainer,
+	useNavigationContainerRef
+} from '@react-navigation/native'
+import { FC, useEffect, useState } from 'react'
 
-const Stack = createNativeStackNavigator<TypeRootStackParamList>()
+import BottomMenu from '@/components/ui/layout/bottom-menu/BottomMenu'
+import { useAuth } from '@/hooks/useAuth'
+import { useCheckAuth } from 'providers/auth/useCheckAuth'
+import PrivateNavigator from './PrivateNavigator'
 
 const Navigation: FC = () => {
-	console.log('Routes:', userRoutes)
+	const { user } = useAuth()
+	const [currentRoute, setCurrentRoute] = useState<string | undefined>(
+		undefined
+	)
+
+	const navRef = useNavigationContainerRef()
+
+	useEffect(() => {
+		setCurrentRoute(navRef.getCurrentRoute()?.name)
+
+		const listener = navRef.addListener('state', () =>
+			setCurrentRoute(navRef.getCurrentRoute()?.name)
+		)
+
+		return () => navRef.removeListener('state', listener)
+	}, [])
+
+	useCheckAuth(currentRoute)
+
 	return (
-		<NavigationContainer>
-			<Stack.Navigator
-				screenOptions={{ contentStyle: { backgroundColor: '#090909' } }}
-			>
-				{userRoutes.map(route => {
-					console.log('Route component:', route.component)
-					return (
-						<Stack.Screen key={route.name} name={route.name} component={route.component} />
-					)
-				})}
-			</Stack.Navigator>
-		</NavigationContainer>
+		<>
+			<NavigationContainer ref={navRef}>
+				<PrivateNavigator />
+			</NavigationContainer>
+			{user && currentRoute && (
+				<BottomMenu nav={navRef.navigate} currentRoute={currentRoute} />
+			)}
+		</>
 	)
 }
 export default Navigation

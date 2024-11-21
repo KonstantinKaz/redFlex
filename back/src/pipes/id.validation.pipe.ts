@@ -6,12 +6,12 @@ import {
 import { Types } from 'mongoose'
 
 export class IdValidationPipe implements PipeTransform {
-	transform(val: string, meta: ArgumentMetadata) {
-		if (meta.type !== 'param') return val
+	transform(value: string, meta: ArgumentMetadata) {
+		if (meta.type !== 'param') return value
 
-		if (!Types.ObjectId.isValid(val))
-			throw new BadRequestException('Invalid format Id')
+		if (!Types.ObjectId.isValid(value))
+			throw new BadRequestException('Invalid format id')
 
-		return val
+		return value
 	}
 }

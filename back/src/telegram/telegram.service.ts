@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { Telegraf } from 'telegraf'
+import { ExtraReplyMessage } from 'telegraf/typings/telegram-types'
 
 import { getTelegramConfig } from 'src/config/telegram.config'
-import { ITelegramOptions } from './telegram.interface'
-import { ExtraReplyMessage } from 'telegraf/typings/telegram-types'
+import { Telegram } from './telegram.interface'
 
 @Injectable()
 export class TelegramService {
 	bot: Telegraf
-	options: ITelegramOptions
+	options: Telegram
 
 	constructor() {
 		this.options = getTelegramConfig()
@@ -31,8 +31,14 @@ export class TelegramService {
 		msg?: string,
 		chatId: string = this.options.chatId
 	) {
-		await this.bot.telegram.sendPhoto(chatId, photo, {
-			caption: msg,
-		})
+		await this.bot.telegram.sendPhoto(
+			chatId,
+			photo,
+			msg
+				? {
+						caption: msg,
+				  }
+				: {}
+		)
 	}
 }

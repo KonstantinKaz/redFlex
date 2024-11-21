@@ -4,8 +4,6 @@ import {
 	Delete,
 	Get,
 	HttpCode,
-	Logger,
-	NotFoundException,
 	Param,
 	Post,
 	Put,
@@ -13,7 +11,7 @@ import {
 	UsePipes,
 	ValidationPipe,
 } from '@nestjs/common'
-import { Auth } from 'src/auth/decorators/Auth.decorator'
+import { Auth } from 'src/auth/decorators/auth.decorator'
 import { IdValidationPipe } from 'src/pipes/id.validation.pipe'
 import { CreateGenreDto } from './dto/create-genre.dto'
 import { GenreService } from './genre.service'
@@ -27,19 +25,14 @@ export class GenreController {
 		return this.genreService.bySlug(slug)
 	}
 
-	@Get()
-	async getAll(@Query('searchTerm') searchTerm?: string) {
-		return this.genreService.getAll(searchTerm)
-	}
-
-	@Get('/popular')
-	async getPopular() {
-		return this.genreService.getPopular()
-	}
-
 	@Get('/collections')
 	async getCollections() {
 		return this.genreService.getCollections()
+	}
+
+	@Get()
+	async getAll(@Query('searchTerm') searchTerm?: string) {
+		return this.genreService.getAll(searchTerm)
 	}
 
 	@Get(':id')
@@ -64,15 +57,13 @@ export class GenreController {
 		@Param('id', IdValidationPipe) id: string,
 		@Body() dto: CreateGenreDto
 	) {
-		const updateGenre = await this.genreService.update(id, dto)
-		if (!updateGenre) throw new NotFoundException('Genre not found')
-		return updateGenre
+		return this.genreService.update(id, dto)
 	}
 
 	@Delete(':id')
+	@HttpCode(200)
 	@Auth('admin')
 	async delete(@Param('id', IdValidationPipe) id: string) {
-		const deletedDoc = await this.genreService.delete(id)
-		if (!deletedDoc) throw new NotFoundException('Genre not found')
+		return this.genreService.delete(id)
 	}
 }
