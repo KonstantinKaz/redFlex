@@ -1,17 +1,15 @@
-import { useTypedNavigation } from '@/hooks/useTypedNavigation'
+import Layout from '@/components/ui/layout/Layout'
+import Loader from '@/components/ui/Loader'
 import { FC } from 'react'
-import { Pressable, Text, View } from 'react-native'
-import cn from 'clsx'
+import Carousel from './carousel/Carousel'
+import { useGetAllMovies } from './useGetAllMovies'
 
 const Home: FC = () => {
-	const { navigate } = useTypedNavigation()
+	const { movies, isLoading } = useGetAllMovies()
 	return (
-		<View>
-			<Text>Home</Text>
-			<Pressable onPress={() => navigate('Auth')}>
-				<Text className={cn('text-white mt-10')}>Go to login</Text>
-			</Pressable>
-		</View>
+		<Layout>
+			{isLoading ? <Loader /> : movies?.length && <Carousel movies={movies} />}
+		</Layout>
 	)
 }
 export default Home
