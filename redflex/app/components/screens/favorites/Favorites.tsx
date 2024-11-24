@@ -1,10 +1,19 @@
-import { Text, View } from 'react-native'
+import Layout from '@/components/ui/layout/Layout'
+import Loader from '@/components/ui/Loader'
 
-const Favorites = () => {
+import MovieCatalog from '@/components/ui/movie/catalog/MovieCatalog'
+import { FC } from 'react'
+import { useFavorites } from './useFavorites'
+
+const Favorites: FC = () => {
+	const { favoriteMovies, isLoading } = useFavorites()
+
+	if (isLoading) return <Loader />
+
 	return (
-		<View>
-			<Text>Favorites</Text>
-		</View>
+		<Layout isHasPadding>
+			<MovieCatalog movies={favoriteMovies} title='Favorites' />
+		</Layout>
 	)
 }
 

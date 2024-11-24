@@ -4,6 +4,7 @@ import { useTypedNavigation } from '@/hooks/useTypedNavigation'
 import { IMovie } from '@/shared/types/movie.interface'
 import { getMediaSource } from '@/utils/getMediaSource'
 
+import FavoriteButton from '@/components/ui/movie/movie-item/favorite-button/FavoriteButton'
 import React, { FC } from 'react'
 import { Animated, Image, Pressable, Text, View } from 'react-native'
 import { ITEM_SIZE, SPACING } from '../carousel.constants'
@@ -38,7 +39,7 @@ const CarouselItem: FC<ICarouselItem> = ({ movie, index, scrollX }) => {
 					onPress={() => navigate('Movie', { slug: movie.slug })}
 				>
 					<View className='absolute top-2 right-2 z-1'>
-						{/* Favorite button */}
+						<FavoriteButton movieId={movie._id} />
 					</View>
 
 					<Image

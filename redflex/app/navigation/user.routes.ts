@@ -2,7 +2,7 @@ import Favorites from '@/components/screens/favorites/Favorites'
 import Profile from '@/components/screens/profile/Profile'
 import Search from '@/components/screens/search/Search'
 import Trending from '@/components/screens/trending/Trending'
-import Auth from 'components/screens/auth/Auth'
+import Genre from '@/components/screens/genre/Genre'
 import Home from 'components/screens/home/Home'
 import { adminRoutes } from './admin.routes'
 import { IRoute } from './navigation.types'
@@ -27,6 +27,10 @@ export const userRoutes: IRoute[] = [
 	{
 		name: 'Search',
 		component: Search
+	},
+	{
+		name: 'Genre',
+		component: Genre
 	}
 ]
 
