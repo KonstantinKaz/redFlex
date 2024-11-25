@@ -10,6 +10,7 @@ export type TypeRootStackParamList = {
 	Profile: undefined
 	Movie: { slug: string }
 	Genre: { slug: string }
+	Actor: { slug: string }
 } & TypeRootStackAdminList
 
 type TypeRootStackAdminList = {
