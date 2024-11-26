@@ -1,17 +1,19 @@
 import GenreList from '@/components/ui/movie/movie-item/GenreList'
 import Rating from '@/components/ui/movie/movie-item/Rating'
-import { IMovie } from '@/shared/types/movie.interface'
 import { Entypo } from '@expo/vector-icons'
 import React, { FC } from 'react'
 import { Animated, StyleSheet, Text, View } from 'react-native'
+import { IMovieComponent } from '../movie-page.interface'
+import { HEADER_HEIGHT } from '../movie.constant'
 
-interface IMovieInfo {
-	movie: IMovie
-}
+const MovieInfo: FC<IMovieComponent> = ({ movie, y }) => {
+	const opacity = y.interpolate({
+		inputRange: [-HEADER_HEIGHT, 0, HEADER_HEIGHT / 2],
+		outputRange: [1, 1, 0]
+	})
 
-const MovieInfo: FC<IMovieInfo> = ({ movie }) => {
 	return (
-		<Animated.View className='px-6 mb-3'>
+		<Animated.View className='px-6 mb-3' style={{ opacity }}>
 			<Text
 				className='text-[#F9FCFC] text-5xl font-semibold mb-2 pr-2'
 				numberOfLines={2}

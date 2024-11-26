@@ -24,7 +24,7 @@ const Layout: FC<PropsWithChildren<ILayout>> = ({
 					'px-6': isHasPadding
 				})}
 				style={{
-					paddingTop: Platform.OS === 'ios' ? top / 6 : top * 1.7,
+					paddingTop: Platform.OS === 'ios' ? top : top * 1.7,
 					...style
 				}}
 			>
