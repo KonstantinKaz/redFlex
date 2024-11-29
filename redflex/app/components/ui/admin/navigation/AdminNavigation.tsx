@@ -4,11 +4,12 @@ import { BlurView } from 'expo-blur'
 import React, { FC, useEffect, useState } from 'react'
 import { View } from 'react-native'
 import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated'
-import BlurButton from '../button/blur-button/BlurButton'
-import Heading from '../heading/Heading'
+
+import BlurButton from '../../button/blur-button/BlurButton'
+import Heading from '../../heading/Heading'
 import { navItems } from './admin-navigation.data'
 import AdminNavItem from './AdminNavItem'
-import HamburgerAnimation from './humburger-animation/HamburgerAnimation'
+import HamburgerAnimation from './hamburger-animation/HamburgerAnimation'
 
 interface IAdminNavigation {
 	title: string
