@@ -26,7 +26,8 @@ type TypeRootStackAdminList = {
 }
 
 export interface IRoute {
-	name: keyof TypeRootStackParamList
-	component: ComponentType
-	isAdmin?: boolean
+	name: string;
+	component: React.ComponentType<any>;
+	isAdmin: boolean;
+	props?: any;
 }

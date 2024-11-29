@@ -1,5 +1,9 @@
+import ActorList from '@/components/screens/admin/actors/ActorList'
 import Admin from '@/components/screens/admin/home/Admin'
+import MovieList from '@/components/screens/admin/movies/MovieList'
 import UserList from '@/components/screens/admin/user/UserList'
+
+import GenreList from '@/components/screens/admin/genres/GenreList'
 import { IRoute } from './navigation.types'
 
 export const adminRoutes: IRoute[] = [
@@ -8,31 +12,31 @@ export const adminRoutes: IRoute[] = [
 		component: Admin,
 		isAdmin: true
 	},
-	// {
-	// 	name: 'ActorList',
-	// 	component: ActorList,
-	// 	isAdmin: true
-	// },
+	{
+		name: 'ActorList',
+		component: ActorList,
+		isAdmin: true
+	},
 	// {
 	// 	name: 'ActorEdit',
 	// 	component: ActorEdit,
 	// 	isAdmin: true
 	// },
-	// {
-	// 	name: 'MovieList',
-	// 	component: MovieList,
-	// 	isAdmin: true
-	// },
+	{
+		name: 'MovieList',
+		component: MovieList,
+		isAdmin: true
+	},
 	// {
 	// 	name: 'MovieEdit',
 	// 	component: MovieEdit,
 	// 	isAdmin: true
 	// },
-	// {
-	// 	name: 'GenreList',
-	// 	component: GenreList,
-	// 	isAdmin: true
-	// },
+	{
+		name: 'GenreList',
+		component: GenreList,
+		isAdmin: true
+	},
 	// {
 	// 	name: 'GenreEdit',
 	// 	component: GenreEdit,
