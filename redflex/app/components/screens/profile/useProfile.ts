@@ -5,15 +5,19 @@ import Toast from 'react-native-toast-message'
 import { IAuthFormData } from '@/shared/types/auth.interface'
 
 import { UserService } from '@/services/user.service'
+import { useEffect } from 'react'
 
 export const useProfile = (setValue: UseFormSetValue<IAuthFormData>) => {
-	const { isLoading } = useQuery({
+	const { isLoading, data } = useQuery({
 		queryKey: ['profile'],
-		queryFn: () => UserService.getProfile(),
-		onSuccess({ email }) {
-			setValue('email', email)
-		}
+		queryFn: () => UserService.getProfile()
 	})
+
+	useEffect(() => {
+		if (data) {
+			setValue('email', data.email)
+		}
+	}, [data, setValue])
 
 	const { mutateAsync } = useMutation({
 		mutationKey: ['update profile'],

@@ -12,35 +12,43 @@ import { IRoute } from './navigation.types'
 export const userRoutes: IRoute[] = [
 	{
 		name: 'Home',
-		component: Home
+		component: Home,
+		isAdmin: false
 	},
 	{
 		name: 'Profile',
-		component: Profile
+		component: Profile,
+		isAdmin: false
 	},
 	{
 		name: 'Favorites',
-		component: Favorites
+		component: Favorites,
+		isAdmin: false
 	},
 	{
 		name: 'Trending',
-		component: Trending
+		component: Trending,
+		isAdmin: false
 	},
 	{
 		name: 'Search',
-		component: Search
+		component: Search,
+		isAdmin: false
 	},
 	{
 		name: 'Genre',
-		component: Genre
+		component: Genre,
+		isAdmin: false
 	},
 	{
 		name: 'Actor',
-		component: Actor
+		component: Actor,
+		isAdmin: false
 	},
 	{
 		name: 'Movie',
-		component: Movie
+		component: Movie,
+		isAdmin: false
 	}
 ]
 

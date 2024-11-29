@@ -17,18 +17,15 @@ const PrivateNavigator = () => {
 				contentStyle: { backgroundColor: '#090909' }
 			}}
 		>
-			{user ? ( 
-				routes.map(route =>
-					user.isAdmin || !route.isAdmin ? (
-						<Stack.Screen key={route.name} {...route} />
-					) : (
-						<Stack.Screen
-							key='Screen404'
-							name='Screen404'
-							component={Screen404}
-						/>
-					)
-				)
+			{user ? (
+				<>
+					{routes.map(route =>
+						user.isAdmin || !route.isAdmin ? (
+							<Stack.Screen key={route.name} {...route} />
+						) : null
+					)}
+					<Stack.Screen name='Screen404' component={Screen404} />
+				</>
 			) : (
 				<Stack.Screen name='Auth' component={Auth} />
 			)}

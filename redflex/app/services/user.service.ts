@@ -1,8 +1,8 @@
 import { getUsersUrl } from '@/config/api.config'
 import { IAuthFormData } from '@/shared/types/auth.interface'
-import { IUser } from '@/shared/types/user.interface'
-import { request } from './api/request.api'
 import { IMovie } from '@/shared/types/movie.interface'
+import { IUser, IUserEditInput } from '@/shared/types/user.interface'
+import { request } from './api/request.api'
 
 export const UserService = {
 	async getAll(searchTerm?: string) {
@@ -50,7 +50,7 @@ export const UserService = {
 		})
 	},
 
-  async update(_id: string, data: IAuthFormData) {
+	async update(_id: string, data: IUserEditInput) {
 		return request<string>({
 			url: getUsersUrl(`${_id}`),
 			method: 'PUT',
