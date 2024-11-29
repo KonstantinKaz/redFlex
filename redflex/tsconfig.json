@@ -11,6 +11,7 @@
 			"@screens/*": ["components/screens/*"],
 
 			"@/hooks/*": ["hooks/*"],
+			"@/navigation/*": ["navigation/*"],
 			"@/shared/*": ["shared/*"],
 			"@/config/*": ["config/*"],
 			"@/services/*": ["services/*"],

@@ -15,6 +15,14 @@ export type TypeRootStackParamList = {
 
 type TypeRootStackAdminList = {
 	Admin: undefined
+	ActorEdit: { id: string }
+	ActorList: undefined
+	MovieEdit: { id: string }
+	MovieList: undefined
+	GenreEdit: { id: string }
+	GenreList: undefined
+	UserEdit: { id: string }
+	UserList: undefined
 }
 
 export interface IRoute {
