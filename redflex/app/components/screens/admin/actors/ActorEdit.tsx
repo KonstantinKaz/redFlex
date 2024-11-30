@@ -1,89 +1,92 @@
-// import { FC } from 'react'
-// import { Controller, useForm } from 'react-hook-form'
-// import { Button, ScrollView, View } from 'react-native'
+import Button from '@/components/ui/button/Button'
+import { IActorEditInput } from '@/shared/types/actor.interface'
+import { FC } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { ScrollView, View } from 'react-native'
 
-// import UploadField from '@/components/ui/form-elements/upload-field/UploadField'
+import { generateSlug } from '@/utils/generateSlug'
 
-// import { IActorEditInput } from '@/shared/types/actor.interface'
+import AdminNavigation from '@/components/ui/admin/navigation/AdminNavigation'
+import Field from '@/components/ui/form/field/Field'
+import SlugWrapper from '@/components/ui/form/field/SlugWrapper'
+import UploadField from '@/components/ui/form/upload-field/UploadField'
+import Layout from '@/components/ui/layout/Layout'
+import Loader from '@/components/ui/Loader'
+import { useActorEdit } from './useActorEdit'
 
-// import { generateSlug } from '@/utils/generateSlug'
+const ActorEdit: FC = () => {
+	const { control, setValue, handleSubmit, getValues } =
+		useForm<IActorEditInput>({
+			mode: 'onChange'
+		})
 
-// import AdminNavigation from '@/components/ui/admin/navigation/AdminNavigation'
-// import Field from '@/components/ui/form/field/Field'
-// import SlugWrapper from '@/components/ui/form/field/SlugWrapper'
-// import Layout from '@/components/ui/layout/Layout'
-// import Loader from '@/components/ui/Loader'
-// import { useActorEdit } from './useActorEdit'
+	const { isLoading, onSubmit } = useActorEdit(setValue)
 
-// const ActorEdit: FC = () => {
-// 	const { control, setValue, handleSubmit, getValues } =
-// 		useForm<IActorEditInput>({
-// 			mode: 'onChange'
-// 		})
+	return (
+		<Layout isHasPadding>
+			<AdminNavigation title='Edit actor' isBackButton />
+			<View>
+				{isLoading ? (
+					<Loader />
+				) : (
+					<ScrollView showsVerticalScrollIndicator={false}>
+						<Field<IActorEditInput>
+							control={control}
+							name='name'
+							placeholder='Enter name'
+							rules={{
+								required: 'Name is required!'
+							}}
+						/>
 
-// 	const { isLoading, onSubmit } = useActorEdit(setValue)
+						<SlugWrapper
+							generate={() => {
+								setValue('slug', generateSlug(getValues('name')))
+							}}
+						>
+							<Field<IActorEditInput>
+								control={control}
+								name='slug'
+								placeholder='Enter slug'
+								rules={{
+									required: 'Slug is required!'
+								}}
+							/>
+						</SlugWrapper>
 
-// 	return (
-// 		<Layout isHasPadding>
-// 			<AdminNavigation title='Edit actor' isBackButton />
-// 			<View>
-// 				{isLoading ? (
-// 					<Loader />
-// 				) : (
-// 					<ScrollView showsVerticalScrollIndicator={false}>
-// 						<Field<IActorEditInput>
-// 							control={control}
-// 							name='name'
-// 							placeholder='Enter name'
-// 							rules={{
-// 								required: 'Name is required!'
-// 							}}
-// 						/>
+						<Controller
+							control={control}
+							name='photo'
+							defaultValue=''
+							render={({
+								field: { value, onChange },
+								fieldState: { error }
+							}) => (
+								<UploadField
+									onChange={onChange}
+									value={value}
+									error={error}
+									folder='actors'
+									placeholder='Photo'
+									isNoImage={value ? false : true}
+								/>
+							)}
+							rules={{
+								required: 'Photo is required!'
+							}}
+						/>
 
-// 						<SlugWrapper
-// 							generate={() => {
-// 								setValue('slug', generateSlug(getValues('name')))
-// 							}}
-// 						>
-// 							<Field<IActorEditInput>
-// 								control={control}
-// 								name='slug'
-// 								placeholder='Enter slug'
-// 								rules={{
-// 									required: 'Slug is required!'
-// 								}}
-// 							/>
-// 						</SlugWrapper>
+						<Button
+							onPress={handleSubmit(onSubmit)}
+							icon='pen-tool'
+						>
+							Update
+						</Button>
+					</ScrollView>
+				)}
+			</View>
+		</Layout>
+	)
+}
 
-// 						<Controller
-// 							control={control}
-// 							name='photo'
-// 							defaultValue=''
-// 							render={({
-// 								field: { value, onChange },
-// 								fieldState: { error }
-// 							}) => (
-// 								<UploadField
-// 									onChange={onChange}
-// 									value={value}
-// 									error={error}
-// 									folder='actors'
-// 									placeholder='Photo'
-// 								/>
-// 							)}
-// 							rules={{
-// 								required: 'Photo is required!'
-// 							}}
-// 						/>
-
-// 						<Button onPress={handleSubmit(onSubmit)} icon='pen-tool'>
-// 							Update
-// 						</Button>
-// 					</ScrollView>
-// 				)}
-// 			</View>
-// 		</Layout>
-// 	)
-// }
-
-// export default ActorEdit
+export default ActorEdit

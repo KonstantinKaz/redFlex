@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { InjectModel } from 'nestjs-typegoose'
-import { UpdateMovieDto } from './dto/update-movie.dto'
-import { MovieModel } from './movie.model'
 import { ModelType } from '@typegoose/typegoose/lib/types'
 import { Types } from 'mongoose'
+import { InjectModel } from 'nestjs-typegoose'
 import { TelegramService } from 'src/telegram/telegram.service'
+import { UpdateMovieDto } from './dto/update-movie.dto'
+import { MovieModel } from './movie.model'
 
 @Injectable()
 export class MovieService {
@@ -135,9 +135,13 @@ export class MovieService {
 	async sendNotification(dto: UpdateMovieDto) {
 		// if (process.env.NODE_ENV !== 'development')
 		// await this.telegramService.sendPhoto(dto.poster)
-		await this.telegramService.sendPhoto(
-			'https://fanart.tv/fanart/movies/245891/movieposter/john-wick-5cdaceaf4e0a7.jpg'
-		)
+		try {
+			await this.telegramService.sendPhoto(
+				'https://fanart.tv/fanart/movies/245891/movieposter/john-wick-5cdaceaf4e0a7.jpg'
+			)
+		} catch (error) {
+			console.error('Telegram notification failed:', error.message)
+		}
 
 		const msg = `<b>${dto.title}</b>`
 

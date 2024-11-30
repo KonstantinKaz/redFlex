@@ -5,9 +5,11 @@ import UserList from '@/components/screens/admin/users/UserList'
 
 import GenreList from '@/components/screens/admin/genres/GenreList'
 
+import ActorEdit from '@/components/screens/admin/actors/ActorEdit'
+import GenreEdit from '@/components/screens/admin/genres/GenreEdit'
 import UserEdit from '@/components/screens/admin/users/UserEdit'
 import { IRoute } from './navigation.types'
-import GenreEdit from '@/components/screens/admin/genres/GenreEdit'
+import MovieEdit from '@/components/screens/admin/movies/MovieEdit'
 
 export const adminRoutes: IRoute[] = [
 	{
@@ -20,21 +22,21 @@ export const adminRoutes: IRoute[] = [
 		component: ActorList,
 		isAdmin: true
 	},
-	// {
-	// 	name: 'ActorEdit',
-	// 	component: ActorEdit,
-	// 	isAdmin: true
-	// },
+	{
+		name: 'ActorEdit',
+		component: ActorEdit,
+		isAdmin: true
+	},
 	{
 		name: 'MovieList',
 		component: MovieList,
 		isAdmin: true
 	},
-	// {
-	// 	name: 'MovieEdit',
-	// 	component: MovieEdit,
-	// 	isAdmin: true
-	// },
+	{
+		name: 'MovieEdit',
+		component: MovieEdit,
+		isAdmin: true
+	},
 	{
 		name: 'GenreList',
 		component: GenreList,

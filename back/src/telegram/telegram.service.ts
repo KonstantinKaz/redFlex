@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common'
 import { Telegraf } from 'telegraf'
 import { ExtraReplyMessage } from 'telegraf/typings/telegram-types'
 
+import { Injectable } from '@nestjs/common'
 import { getTelegramConfig } from 'src/config/telegram.config'
 import { Telegram } from './telegram.interface'
 
