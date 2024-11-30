@@ -1,9 +1,9 @@
 import { MovieService } from '@/services/movie.service'
 import { useQuery } from '@tanstack/react-query'
-import { useSearchFrom } from './useSearchForm'
+import { useSearchForm } from './useSearchForm'
 
 export const useSearch = () => {
-	const { searchTerm, debouncedSearch, control } = useSearchFrom()
+	const { searchTerm, debouncedSearch, control } = useSearchForm()
 
 	const { isLoading, data: movies } = useQuery({
 		queryKey: ['search movies', debouncedSearch],

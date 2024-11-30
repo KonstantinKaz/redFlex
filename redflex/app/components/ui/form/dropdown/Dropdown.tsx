@@ -17,19 +17,7 @@ const Dropdown: FC<IDropdown> = ({
 	const [isOpen, setIsOpen] = useState(false)
 	const [value, setValue] = useState<string[] | null>(field.value)
 	const [items, setItems] = useState(options)
-
-	// const getValue = useCallback((): string[] | null => {
-	// 	if (field.value) {
-	// 		return isMulti
-	// 			? items.filter(option => field.value.indexOf(option.value) >= 0)
-	// 			: items.find(option => option.value === field.value)?.value
-	// 	} else return null
-	// }, [field.value])
-
-	// useEffect(() => {
-	// 	if (!value) setValue(getValue())
-	// }, [field.value])
-
+	
 	return (
 		<View className='z-10' style={style}>
 			<DropDownPicker

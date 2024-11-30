@@ -2,16 +2,15 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 import { ModelType } from '@typegoose/typegoose/lib/types'
 import { Types } from 'mongoose'
 import { InjectModel } from 'nestjs-typegoose'
-import { TelegramService } from 'src/telegram/telegram.service'
 import { UpdateMovieDto } from './dto/update-movie.dto'
 import { MovieModel } from './movie.model'
 
 @Injectable()
 export class MovieService {
 	constructor(
-		@InjectModel(MovieModel) private readonly MovieModel: ModelType<MovieModel>,
-		private readonly telegramService: TelegramService
-	) {}
+		@InjectModel(MovieModel) private readonly MovieModel: ModelType<MovieModel>
+	) // private readonly telegramService: TelegramService
+	{}
 
 	async getAll(searchTerm?: string) {
 		let options = {}
@@ -112,10 +111,10 @@ export class MovieService {
 	}
 
 	async update(_id: string, dto: UpdateMovieDto) {
-		if (!dto.isSendTelegram) {
-			await this.sendNotification(dto)
-			dto.isSendTelegram = true
-		}
+		// if (!dto.isSendTelegram) {
+		// 	await this.sendNotification(dto)
+		// 	dto.isSendTelegram = true
+		// }
 
 		const updateDoc = await this.MovieModel.findByIdAndUpdate(_id, dto, {
 			new: true,
@@ -132,30 +131,30 @@ export class MovieService {
 		return deleteDoc
 	}
 
-	async sendNotification(dto: UpdateMovieDto) {
-		// if (process.env.NODE_ENV !== 'development')
-		// await this.telegramService.sendPhoto(dto.poster)
-		try {
-			await this.telegramService.sendPhoto(
-				'https://fanart.tv/fanart/movies/245891/movieposter/john-wick-5cdaceaf4e0a7.jpg'
-			)
-		} catch (error) {
-			console.error('Telegram notification failed:', error.message)
-		}
+	// async sendNotification(dto: UpdateMovieDto) {
+	// 	// if (process.env.NODE_ENV !== 'development')
+	// 	// await this.telegramService.sendPhoto(dto.poster)
+	// 	try {
+	// 		await this.telegramService.sendPhoto(
+	// 			'https://fanart.tv/fanart/movies/245891/movieposter/john-wick-5cdaceaf4e0a7.jpg'
+	// 		)
+	// 	} catch (error) {
+	// 		console.error('Telegram notification failed:', error.message)
+	// 	}
 
-		const msg = `<b>${dto.title}</b>`
+	// 	const msg = `<b>${dto.title}</b>`
 
-		await this.telegramService.sendMessage(msg, {
-			reply_markup: {
-				inline_keyboard: [
-					[
-						{
-							url: 'https://okko.tv/movie/free-guy',
-							text: '🍿 Go to watch',
-						},
-					],
-				],
-			},
-		})
-	}
+	// 	await this.telegramService.sendMessage(msg, {
+	// 		reply_markup: {
+	// 			inline_keyboard: [
+	// 				[
+	// 					{
+	// 						url: 'https://okko.tv/movie/free-guy',
+	// 						text: '🍿 Go to watch',
+	// 					},
+	// 				],
+	// 			],
+	// 		},
+	// 	})
+	// }
 }
