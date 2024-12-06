@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { ScrollView, Text, View } from 'react-native'
+import { ScrollView, Text, View, ActivityIndicator } from 'react-native'
 
 import Loader from '../../Loader'
 
@@ -13,13 +13,15 @@ const AdminTable: FC<IAdminTable> = ({
 	removeHandler,
 	tableItems = []
 }) => {
+	if (isLoading) {
+		return <ActivityIndicator testID="loading-indicator" />
+	}
+	
 	return (
 		<ScrollView showsHorizontalScrollIndicator={false} horizontal>
 			<View className='pb-6'>
 				<AdminTableHeader headerItems={headerItems} />
-				{isLoading ? (
-					<Loader />
-				) : tableItems?.length ? (
+				{tableItems?.length ? (
 					<ScrollView showsVerticalScrollIndicator={false}>
 						{tableItems.map(tableItem => (
 							<AdminTableItem

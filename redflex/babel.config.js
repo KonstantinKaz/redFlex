@@ -13,8 +13,15 @@ module.exports = function (api) {
 					rootPathPrefix: '@/'
 				}
 			],
-			['inline-dotenv'],
-			['react-native-reanimated/plugin']
-		]
+			'react-native-reanimated/plugin',
+			'inline-dotenv'
+		],
+		env: {
+			test: {
+				plugins: [
+					'@babel/plugin-transform-runtime'
+				]
+			}
+		}
 	}
 }

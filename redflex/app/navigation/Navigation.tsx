@@ -21,14 +21,17 @@ const Navigation: FC = () => {
 	const navRef = useNavigationContainerRef()
 
 	useEffect(() => {
-		setCurrentRoute(navRef.getCurrentRoute()?.name)
+		const unsubscribe = navRef.addListener('state', () => {
+			const currentRoute = navRef.getCurrentRoute();
+			setCurrentRoute(currentRoute?.name ?? 'default');
+		});
 
-		const listener = navRef.addListener('state', () =>
-			setCurrentRoute(navRef.getCurrentRoute()?.name)
-		)
+		// Установка начального маршрута
+		const initialRoute = navRef.getCurrentRoute();
+		setCurrentRoute(initialRoute?.name ?? 'default');
 
-		return () => navRef.removeListener('state', listener)
-	}, [])
+		return unsubscribe;
+	}, [navRef]);
 
 	useCheckAuth(currentRoute)
 

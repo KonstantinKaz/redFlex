@@ -5,7 +5,7 @@ import Movie from '@/components/screens/movie/Movie'
 import Profile from '@/components/screens/profile/Profile'
 import Search from '@/components/screens/search/Search'
 import Trending from '@/components/screens/trending/Trending'
-import Home from 'components/screens/home/Home'
+import Home from '@/components/screens/home/Home'
 import { adminRoutes } from './admin.routes'
 import { IRoute } from './navigation.types'
 

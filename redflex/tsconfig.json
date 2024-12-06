@@ -1,5 +1,6 @@
 {
 	"extends": "expo/tsconfig.base",
+	"exclude": ["app/tests/**/*.test.ts"],
 	"compilerOptions": {
 		"allowSyntheticDefaultImports": true,
 		"strict": true,

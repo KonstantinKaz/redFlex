@@ -18,15 +18,8 @@ const AdminActions: FC<IAdminActions> = ({ editNavigate, removeHandler }) => {
 				/>
 			</Pressable>
 			<Pressable
-				onPress={() => {
-					Alert.alert('Are you sure?', undefined, [
-						{
-							text: 'Yes',
-							onPress: removeHandler
-						},
-						{ text: 'Cancel' }
-					])
-				}}
+				testID='delete-button'
+				onPress={removeHandler}
 			>
 				<MaterialCommunityIcons name={'close'} color='#AB2D2F' size={20} />
 			</Pressable>
